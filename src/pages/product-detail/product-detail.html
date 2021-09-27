@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+    <ion-title>
+      {{'Detalle del Producto'| translate }}
+    </ion-title>
+  </ion-navbar>
+  <ion-toolbar *ngIf="!is_upcomming && product.flash_start_date" color="wscolor">
+
+    <ion-title class="sub-ion-title">
+      <ion-icon name="clock" item-start></ion-icon>
+      {{'Descuento finaliza en'|translate}}&nbsp;<timer [data]="product"></timer>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="page-product-detail">
+
+  <ion-slides pager="true" dir="{{shared.dir}}">
+    <ion-slide *ngIf="product!=null">
+      <img src="{{config.imgUrl+product.products_image}}" imageViewer>
+    </ion-slide>
+    <ion-slide *ngFor="let b of product.images">
+      <img src="{{config.imgUrl+b.image}}" imageViewer>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-grid class="product-detail-title">
+    <ion-row>
+      <div class="product-new" *ngIf="checkProductNew()">{{'Nuevo'|translate}}</div>
+      <ion-col col-12>
+        <h3>{{product.products_name}}
+          <br>
+          <small *ngFor="let c of product.categories; let i = index">{{c.categories_name}}<span
+              *ngIf="product.categories.length!=i+1">,</span>&nbsp;</small>
+        </h3>
+        <p>{{'Vistas'|translate}}&nbsp;({{product.products_liked}})</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+
+    <ion-list>
+      <ion-item *ngFor=" let att of product.attributes">
+        <ion-label>{{att.option.name}}</ion-label>
+        <ion-select required [(ngModel)]="selectAttribute"
+          (ngModelChange)="fillAttributes(selectAttribute,att.option.id)">
+          <ion-option [value]="">Sin Nombre</ion-option>
+          <ion-option [value]="val" *ngFor=" let val of att.values">{{val.value+' '+val.price_prefix+val.price+'
+            '+config.currency}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+  </ion-grid>
+
+  <ion-row align-items-center>
+    <ion-col col-12>{{'Cantidad minima: '+product.products_min_order |translate}}</ion-col>
+
+    <ion-col col-6>{{'Cantidad' |translate}}&nbsp;:&nbsp;</ion-col>
+    <ion-col col-6>
+      <button ion-button small outline (click)="qunatityMinus(product);">
+        <ion-icon name="remove"></ion-icon>
+      </button>
+      <!--<span class="dgi">{{product.customers_basket_quantity}}</span>-->
+      <span class="dgi">{{product.products_quantity}}</span>
+      <button ion-button small outline (click)="qunatityPlus(product);">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col col-6>
+      <strong>{{'Sub Total'}}&nbsp;:&nbsp;</strong>
+    </ion-col>
+    <ion-col col-6>
+      <strong>{{total | curency}}</strong>
+    </ion-col>
+  </ion-row>
+
+  <!---------------------------------------------------------------------------------->
+
+  <ion-grid class="product-detail-header">
+    <ion-row>
+      <div class="product-off" *ngIf="product.discount_price!=null">{{pDiscount()}}{{'OFF'|translate}}</div>
+      <ion-col col-8>
+        <span *ngIf="!product.flash_start_date">
+          <span class="product-price-normal" *ngIf="product.discount_price==null">{{product_price |curency}}</span>
+          <span class="product-price-normal" *ngIf="product.discount_price!=null">{{discount_price |curency}}</span>
+          <span class="product-price-normal-through" *ngIf="product.discount_price!=null">{{product_price
+            |curency}}</span>
+        </span>
+        <span *ngIf="product.flash_start_date">
+          <span class="product-price-normal">{{flash_price |curency}}</span>
+          <span class="product-price-normal-through">{{product_price |curency}}</span>
+        </span>
+        <span class="product-outstock" *ngIf="cartButton=='outOfStock'">{{'AGOTADO'|translate}}</span>
+        <span class="product-instock" *ngIf="cartButton=='addToCart'">{{'Disponible'|translate}}</span>
+
+      </ion-col>
+      <ion-col col-4>
+        <ion-icon name="share" (click)="share()"></ion-icon>
+        <ion-icon [name]="product.isLiked=='0'? 'heart-outline' : 'heart'" (click)="clickWishList()"></ion-icon>
+      </ion-col>
+
+      <button ion-button block color="wscolor" *ngIf="cartButton=='addToCart' && !is_upcomming"
+        (click)="addToCartProduct()">
+        {{'AÑADIR AL CARRITO'|translate}}</button>
+      <button ion-button block color="danger" *ngIf="cartButton=='outOfStock' && !is_upcomming">
+        {{'SIN STOCK'|translate}}</button>
+      <button ion-button block color="wscolor" *ngIf="cartButton=='external' && !is_upcomming"
+        (click)="openProductUrl()">
+        {{'VER PRODUCTO'|translate}}</button>
+
+      <button ion-button block color="danger" *ngIf="is_upcomming">{{'Proximamente'|translate}}</button>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="product-detail-content"
+    *ngIf="product.products_description!=null && product.products_description!=''">
+    <ion-row>
+      <ion-col col-12>
+        <h4>{{'Descripción del Producto'|translate}}</h4>
+        <div class="product-describtion" [innerHTML]="product.products_description"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="product-detail-content" *ngIf="product.attributes.length!=0">
+    <ion-row>
+      <ion-col col-12>
+        <h4>{{'Detalles Técnicos'|translate}}</h4>
+        <div class="product-describtion" [innerHTML]="product.products_description"></div>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <button ion-button block color="wscolor" *ngIf="cartButton=='addToCart' && !is_upcomming"
+        (click)="addToCartProduct()">
+        {{'AÑADIR AL CARRITO'|translate}}</button>
+      <button ion-button block color="danger" *ngIf="cartButton=='outOfStock' && !is_upcomming">
+        {{'SIN STOCK'|translate}}</button>
+      <button ion-button block color="wscolor" *ngIf="cartButton=='external' && !is_upcomming"
+        (click)="openProductUrl()">
+        {{'VER PRODUCTO'|translate}}</button>
+
+      <button ion-button block color="danger" *ngIf="is_upcomming">{{'Proximamente'|translate}}</button>
+    </ion-row>
+  </ion-grid>
+</ion-content>

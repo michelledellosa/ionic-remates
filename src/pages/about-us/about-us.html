@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>
+      {{'Sobre Nosotros'| translate }}
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+      <button ion-button icon-only class="cart-button" (click)="openCart()">
+        <ion-icon name="cart">
+          <ion-badge color="accent-color">{{shared.cartquantity}}</ion-badge>
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="page-about-us" padding color="wscolor">
+  <div>
+    <br>
+    <br>
+    <br>
+    <img class="image" src="assets/icon.png" />
+
+    <p class="estilo-md"><b>Informacion en Espera</b></p>
+  </div>
+  <br>
+  <br>
+  <ion-list>
+    <button ion-item (click)="openSite()">
+      {{"Visita Nuestro Sitio Oficial"|translate}}
+      <ion-icon showWhen="android" name="arrow-forward" item-end></ion-icon>
+    </button>
+
+  </ion-list>
+</ion-content>

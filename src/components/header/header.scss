@@ -1,0 +1,21 @@
+header {
+    .toolbar{
+        .bar-buttons{
+            .cart-button{
+                position: relative;
+                width: 42px;
+                top:1px;
+                right: 1px;
+                overflow: visible !important;
+                .icon{
+                    .badge{
+                        background: color($colors, secondary-light);
+                        position: absolute;
+                        top: -3px;
+                        right: -5px;
+                    }
+                }
+            }
+        }
+    }
+}

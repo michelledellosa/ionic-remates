@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>
+      {{'Ajustes'| translate }}
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+      <button ion-button icon-only class="cart-button" (click)="openCart()">
+        <ion-icon name="cart">
+          <ion-badge color="accent-color">{{shared.cartquantity}}</ion-badge>
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content class="page-settings">
+
+  <ion-list class="list-avatar" padding>
+    <ion-item text-center *ngIf="shared.customerData.customers_id==null" (click)="openLoginPage()" #41BCE1>
+      <ion-avatar>
+        <ion-icon name="contact"></ion-icon>
+      </ion-avatar>
+      <h2>{{ 'Inicio de Sesión & Registrarse' | translate }}</h2>
+      <p>{{ 'Iniciar Sesión o Registrarse de forma Gratuita' | translate }}</p>
+    </ion-item>
+
+    <ion-item text-center *ngIf="shared.customerData.customers_id!=null">
+      <ion-avatar>
+        <img src="{{config.imgUrl+shared.customerData.customers_picture}}">
+      </ion-avatar>
+      <h2>{{shared.customerData.customers_firstname +"&nbsp;"+shared.customerData.customers_lastname}}</h2>
+      <p>{{shared.customerData.email}}</p>
+      <button ion-button color="light" (click)="openPage('myAccount')">
+        {{'Editar Perfil' | translate }}
+      </button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list padding>
+    <button ion-item (click)="showModal('termServices')">
+
+      {{"Sitio Web Oficial"|translate}}
+      <ion-icon showWhen="android" name="arrow-forward" item-end></ion-icon>
+    </button>
+    <button ion-item (click)="openSite()">
+      {{"Política de Privacidad"|translate}}
+      <ion-icon showWhen="android" name="arrow-forward" item-end></ion-icon>
+
+    </button>
+    <button ion-item (click)="showModal('refundPolicy')">
+      {{"Política de Reembolso"|translate}}
+      <ion-icon showWhen="android" name="arrow-forward" item-end></ion-icon>
+
+    </button>
+    <button ion-item (click)="showModal('termServices')">
+      {{"Términos y Servicios"|translate}}
+      <ion-icon showWhen="android" name="arrow-forward" item-end></ion-icon>
+    </button>
+
+  </ion-list>
+  <ion-list *ngIf="shared.customerData.customers_id!=null" padding>
+    <button ion-button block color="wscolor" (click)="logOut()">
+      {{'Cerrar Sesión' | translate }}
+    </button>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-navbar color="wscolor" >
+    <button ion-button icon-only menuToggle >
+      <ion-icon name="menu" ></ion-icon>
+    </button>
+    <ion-searchbar placeholder="Quiero Comprar..." (click)="openSearch()"></ion-searchbar>
+
+    <ion-buttons end>
+ 
+      <button ion-button icon-only class="cart-button" (click)="openCart()">
+        <ion-icon name="cart">
+          <ion-badge color="accent-color">{{shared.cartquantity}}</ion-badge>
+        </ion-icon>
+      </button>
+
+    </ion-buttons>
+  </ion-navbar>  
+</ion-header>
+
+<ion-content class="page-home" (ionScroll)="onScroll($event)"  >   
+    <ion-slides>
+      <ion-slide >
+          <ion-segment class="botonera" [(ngModel)]="segments" color="dark">
+   
+              <ion-segment-button value="topSeller">{{ 'Popular' | translate }}</ion-segment-button>
+              <ion-segment-button value="deals">{{ 'Ofertas' | translate }} </ion-segment-button>
+              <ion-segment-button value="mostLiked"> {{ 'Mas Visitado' | translate }}</ion-segment-button>
+              <ion-segment-button value="reciente"> {{ 'Visto Recientemente' | translate }}</ion-segment-button>        
+       
+        </ion-segment>
+      </ion-slide>
+    </ion-slides>
+  
+  <!-- top banners -->
+  <banners></banners>
+
+  <!-- top segments products -->
+  <div class="module" [ngSwitch]="segments">
+  
+   
+  <ion-grid *ngSwitchCase="'topSeller'" class="animate-product">    
+    <ion-row>
+        <ion-col col-6 *ngFor="let p of shared.flashSaleProducts">
+            <ion-col>
+                <product [data]="p" [type]="'flash'"></product>          
+            </ion-col>
+          </ion-col>
+
+    </ion-row>  
+    
+   
+  </ion-grid>
+  
+  <ion-grid slidesPerView=2.2 spaceBetween=10 *ngSwitchCase="'deals'" class="animate-product">    
+    <ion-row>
+        <ion-col col-6 *ngFor="let p of shared.tab2">
+          <ion-col>
+              <product [data]="p" [type]="'normal'"></product>
+          </ion-col>  
+        </ion-col>
+    </ion-row>  
+    
+  </ion-grid>
+
+    <ion-grid slidesPerView=2.2 spaceBetween=10 *ngSwitchCase="'mostLiked'" dir="{{shared.dir}}" class="animate-product">    
+      <ion-row>
+          <ion-col col-6 *ngFor="let p of shared.tab3">
+            <ion-col>
+                <product [data]="p" [type]="'normal'"></product>
+            </ion-col>  
+            
+          </ion-col>
+      </ion-row>  
+    </ion-grid>
+
+    <ion-grid *ngSwitchCase="'reciente'" class="animate-product">
+      <ion-grid class="module" *ngIf="shared.recentViewedProducts.length!=0" [@animate]>
+    
+        <ion-row slidesPerView=2.2 spaceBetween=10 dir="{{shared.dir}}" autoResize='true'>
+          <ion-col col-6 *ngFor="let p of shared.recentViewedProducts" [@animate]>
+            <product [data]="p" [type]="'recent'"></product>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-grid>
+
+  </div>
+  
+  <ion-fab bottom right *ngIf="scrollTopButton">
+    <button ion-fab (click)="scrollToTop()">
+      <ion-icon name="arrow-round-up"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

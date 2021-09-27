@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-searchbar placeholder="Quiero Comprar..." (click)="openSearch()"></ion-searchbar>
+
+    <ion-buttons end>
+ 
+      <button ion-button icon-only class="cart-button" (click)="openCart()">
+        <ion-icon name="cart">
+          <ion-badge color="accent-color">{{shared.cartquantity}}</ion-badge>
+        </ion-icon>
+      </button>
+
+    </ion-buttons>
+  </ion-navbar>  
+</ion-header>
+
+<ion-content class="page-home3">
+
+  <!-- top banners -->
+  <banners></banners>
+
+  <!-- Flash sale items products -->
+  <div class="module" *ngIf="shared.flashSaleProducts.length!=0" [@animate]>
+    <h3>{{'Lo mas Vendido'|translate}}</h3><!--antes decia Flash Sale-->
+    <ion-slides slidesPerView=2.2 spaceBetween=10 dir="{{shared.dir}}" autoResize='true'>
+      <ion-slide *ngFor="let p of shared.flashSaleProducts" [@animate]>
+        <product [data]="p" [type]="'flash'"></product>
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <!-- Top Seller -->
+  <div class="module">
+    <h3>{{ 'Mejores Vendedores' | translate }}</h3>
+    <ion-slides slidesPerView=2.2 spaceBetween=10 class="animate-product" dir="{{shared.dir}}">
+      <ion-slide *ngFor="let p of shared.tab1">
+        <product [data]="p" [type]="'normal'"></product>
+      </ion-slide>
+      <ion-slide class="swiper-slide-last">
+        <ion-card (click)="openProducts('top seller')">
+          <ion-card-content>
+            <ion-icon name="checkmark-circle"></ion-icon>
+            <h4>View All</h4>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <!-- Deals -->
+  <div class="module">
+    <h3>{{ 'Ofertas' | translate }}</h3>
+    <ion-slides slidesPerView=2.2 spaceBetween=10 class="animate-product" dir="{{shared.dir}}">
+      <ion-slide *ngFor="let p of shared.tab2">
+        <product [data]="p" [type]="'normal'"></product>
+      </ion-slide>
+      <ion-slide class="swiper-slide-last">
+        <ion-card (click)="openProducts('special')">
+          <ion-card-content>
+            <ion-icon name="checkmark-circle"></ion-icon>
+            <h4>Ver Todo</h4>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <!-- Most Liked -->
+  <div class="module">
+    <h3>{{ 'Lo mas Visitado' | translate }}</h3>
+    <ion-slides slidesPerView=2.2 spaceBetween=10 class="animate-product" dir="{{shared.dir}}">
+      <ion-slide *ngFor="let p of shared.tab3">
+        <product [data]="p" [type]="'normal'"></product>
+      </ion-slide>
+      <ion-slide class="swiper-slide-last">
+        <ion-card (click)="openProducts('most liked')">
+          <ion-card-content>
+            <ion-icon name="checkmark-circle"></ion-icon>
+            <h4>View All</h4>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <!-- Recent Viewed items products -->
+  <div class="module" *ngIf="shared.recentViewedProducts.length!=0" [@animate]>
+    <h5>{{'Visto Recientemente'|translate}}</h5>
+    <ion-slides slidesPerView=2.2 spaceBetween=10 dir="{{shared.dir}}">
+      <ion-slide *ngFor="let p of shared.recentViewedProducts" [@animate]>
+        <product [data]="p" [type]="'recent'"></product>
+      </ion-slide>
+      <ion-slide class="swiper-slide-last"></ion-slide>
+    </ion-slides>
+  </div>
+
+</ion-content>

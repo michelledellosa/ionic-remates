@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+    <ion-title>
+      {{'Dirección de Envío'| translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding-horizontal>
+  <form #loginForm="ngForm">
+    <ion-row>
+      <ion-col col-12>
+        <ion-list>
+          <ion-item>
+          <ion-label floating>{{'Nombre'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_firstname" [(ngModel)]="shared.orderDetails.delivery_firstname"
+              required></ion-input>
+          </ion-item>
+
+          <ion-item>
+          <ion-label floating>{{'Apellido'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_lastname" [(ngModel)]="shared.orderDetails.delivery_lastname"
+              required></ion-input>
+          </ion-item>
+          <ion-item>
+          <ion-label floating>{{'Dirección'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_street_address" [(ngModel)]="shared.orderDetails.delivery_street_address"
+              required></ion-input>
+          </ion-item>
+          <ion-item>
+          <ion-label floating>{{'País'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_country" (tap)="selectCountryPage()"
+              [readonly]="true" [(ngModel)]="shared.orderDetails.delivery_country" required></ion-input>
+          </ion-item>
+          <ion-item>
+          <ion-label floating>{{'Ciudad'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_city" [(ngModel)]="shared.orderDetails.delivery_city"
+              required></ion-input>
+          </ion-item>
+          <ion-item>
+          <ion-label floating>{{'Codigo Postal'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_postcode" [(ngModel)]="shared.orderDetails.delivery_postcode"
+              required></ion-input>
+          </ion-item>
+          <ion-item>
+          <ion-label floating>{{'Teléfono'|translate}}</ion-label>
+            <ion-input type="text" placeholder="" name="delivery_phone" [(ngModel)]="shared.orderDetails.delivery_phone"
+              required></ion-input>
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+    
+    </ion-row>
+  </form>
+</ion-content>
+<ion-footer>
+  <button ion-button block color="wscolor" (click)="submit()" [disabled]="!loginForm.form.valid">{{'Siguiente'|translate}}</button>
+</ion-footer>

@@ -1,0 +1,335 @@
+<ion-header>
+
+  <ion-navbar color="wscolor">
+    <ion-title>
+      {{'Orden'| translate }}
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openHomePage()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="page-order">
+  <ion-card>
+    <ion-card-header>
+      {{'Dirección de Envío'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{orderDetail.delivery_street_address+', '+orderDetail.delivery_city+', '+orderDetail.delivery_state+'
+      '+orderDetail.delivery_postcode+',
+      '+orderDetail.delivery_country}}
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      {{'Dirección de Envío'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{orderDetail.billing_street_address+', '+orderDetail.billing_city+', '+orderDetail.billing_state+'
+      '+orderDetail.billing_postcode+',
+      '+orderDetail.billing_country}}
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      {{'Metodo de Envío'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      {{orderDetail.shipping_method}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="order-product">
+    <ion-card-header>
+      {{'Productos'|translate}}
+    </ion-card-header>
+    <ion-card-content *ngFor="let product of products">
+      <ion-row>
+        <h3>{{product.products_name}}
+          <br>
+          <small>{{product.categories_name}}</small>
+        </h3>
+      </ion-row>
+      <ion-item>
+
+        <ion-thumbnail item-start>
+          <img src="{{config.imgUrl+product.image}}">
+        </ion-thumbnail>
+        <ion-row>
+          <ion-col col-6>{{'Precio' |translate}}&nbsp;:&nbsp;</ion-col>
+          <ion-col col-6>{{product.price| curency}}</ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let att of product.attributes">
+          <ion-col col-6>{{att.products_options_values+'&nbsp;'+att.products_options}}&nbsp;:</ion-col>
+          <!--<ion-col col-6>{{att.price_prefix +'&nbsp;'+ att.options_values_price+'&nbsp;'+config.curency}}</ion-col>-->
+        </ion-row>
+
+        <ion-row>
+          <ion-col col-6>
+            <strong>{{'Sub Total' |translate}}</strong>&nbsp;:&nbsp;
+          </ion-col>
+          <ion-col col-6>
+            <strong>{{product.total | curency}}</strong>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-header>
+      {{'SubTotal'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col col-6>
+          {{'Precio de Producto'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{productsTotal| curency}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          {{'Impuesto'|translate}}
+          <!--antes decia rax-->
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{orderDetail.total_tax| curency}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          {{'Costo de Envío'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{orderDetail.shipping_cost| curency}}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="couponApplied == 1">
+        <ion-col col-6>
+          {{'Descuento'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{discount| curency}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          <strong>{{'Total'|translate}}</strong>
+        </ion-col>
+        <ion-col col-6 text-right>
+          <strong>{{totalAmountWithDisocunt| curency}}</strong>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngFor="let coupon of couponArray">
+    <ion-card-content>
+      <ion-row>
+        <ion-col col-6>
+          {{'Codigo de Cupón'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{coupon.code}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          {{'Monto del cupón'|translate}}
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{coupon.amount}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12 *ngIf="coupon.discount_type == 'percent'">
+          {{'Porcentaje de descuento por todo el carrito'|translate}}
+        </ion-col>
+        <ion-col col-12 *ngIf="coupon.discount_type == 'fixed_cart'">
+          {{'Porcentaje de Descuento fijo '|translate}}
+        </ion-col>
+        <ion-col col-12 *ngIf="coupon.discount_type == 'fixed_product'">
+          {{'Descuento en Productos Seleccionados'|translate}}
+        </ion-col>
+        <ion-col col-12 *ngIf="coupon.discount_type == 'percent_product'">
+          {{'Porcentaje de Descuento en Productos Seleccionados'|translate}}
+        </ion-col>
+        <ion-col col-12>
+          <button ion-button small color="wscolor" (click)="deleteCoupon(coupon.code)">{{'Eliminar'|translate}}</button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-input type="text" placeholder="{{'coupon code'|translate}}" [(ngModel)]="c"></ion-input>
+          <button ion-button clear item-end (click)="getCoupon(c)">{{'Aplicar'|translate}}</button>
+        </ion-item>
+      </ion-list>
+
+    </ion-card-content>
+  </ion-card>
+  <button *ngIf="config.appInProduction" ion-button small clear (click)="couponslist()">
+    {{'Codigos de Cupones'|translate}}</button>
+
+  <ion-card>
+    <ion-card-header>
+      {{'Nota de Orden'|translate}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input type="text" placeholder="{{'Nota para el Comprador'|translate}}" name="note"
+          [(ngModel)]="orderDetail.comments"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label color="dark">{{'Pago'|translate}}</ion-label>
+          <ion-select [(ngModel)]="orderDetail.payment_method" (ionChange)=" scrollToBottom()"
+            okText="{{'ok'|translate}}" cancelText="{{'Cancelar'|translate}}">
+            <div *ngFor="let p of paymentMethods">
+              <ion-option *ngIf="p.active==1" [value]="p.method">{{p.name}}</ion-option>
+            </div>
+            <!-- <ion-option value="simplePaypal" *ngIf="paymentPaypal">{{'Paypal'|translate}}</ion-option>
+            <ion-option value="paypal" *ngIf="paymentBraintree">{{'Braintree Paypal'|translate}}</ion-option>
+            <ion-option value="card_payment" *ngIf="paymentBraintree">{{'Pago con Tarjeta Braintree'|translate}}</ion-option>
+            <ion-option value="stripe" *ngIf="paymentStripe">{{'Pago con tarjeta de Debito'|translate}}</ion-option>
+            <ion-option value="cash_on_delivery" *ngIf="paymentCod">{{'Pago en Servicio a Domicilio'|translate}}</ion-option> -->
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+
+  <div class="braintree-paypal" [class.hidden]="orderDetail.payment_method!='braintree_paypal'">
+    <div id="paypal-container"></div>
+  </div>
+
+  <div class="braintree-card" [class.hidden]="orderDetail.payment_method!='braintree_card'">
+    <form id="braintree-form" class="form" #brainForm="ngForm">
+      <div id="error-message"></div>
+      <label class="hosted-fields--label" for="card-number" translate>{{'Numero de Tarjeta'|translate}}</label>
+      <div class="hosted-field form-control" id="card-number" value="4111111111111111"></div>
+
+      <label class="hosted-fields--label" for="cvv" value="123">CVV</label>
+      <div class="hosted-field form-control" id="cvv"></div>
+
+      <label class="hosted-fields--label" for="expiration-date" translate>{{'Fecha de Vencimiento'|translate}}</label>
+      <div class="hosted-field form-control" id="expiration-date" value="10/2019"></div>
+
+      <input type="hidden" name="payment-method-nonce">
+      <button ion-button block color="wscolor" type="submit" id="braintreesubmit" disabled>
+        {{'Continuar'|translate}}</button>
+    </form>
+  </div>
+
+  <div class="stripe-card" *ngIf="orderDetail.payment_method=='stripe'">
+    <form #stripeForm="ngForm" (ngSubmit)="stripePayment()">
+      <ion-row>
+        <ion-col>
+          <ion-list>
+
+            <ion-item>
+              <ion-input type="number" name="number" placeholder="{{'Número de Tarjeta'|translate}}"
+                [(ngModel)]="stripeCard.number" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{'Mes de Vencimiento'|translate}}</ion-label>
+              <ion-select name="expMonth" [(ngModel)]="stripeCard.expMonth" required>
+                <ion-option *ngFor="let n of [1,2,3,4,5,6,7,8,9,10,11,12]" value="{{n}}">{{n}}</ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>{{'Año de Vencimiento'|translate}}</ion-label>
+              <ion-select name="expYear" [(ngModel)]="stripeCard.expYear" required>
+                <ion-option
+                  *ngFor="let n of [2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033]"
+                  value="{{n}}">{{n}}</ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-input type="number" name="cvc" placeholder="{{'CVC'|translate}}" [(ngModel)]="stripeCard.cvc"
+                required></ion-input>
+            </ion-item>
+
+          </ion-list>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button block color="wscolor" type="submit"
+            [disabled]="!stripeForm.form.valid">{{'Continuar'|translate}}</button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+  <!-- new payment method hyperpay  -->
+  <div class="stripe-card" *ngIf="orderDetail.payment_method=='hyperpay' || orderDetail.payment_method=='cybersource'">
+    <form #card="ngForm" (ngSubmit)="hyperpayPayment()">
+      <ion-row>
+        <ion-col>
+          <ion-list>
+
+            <ion-item>
+              <ion-input type="number" name="number" placeholder="{{'Número de Tarjeta'|translate}}"
+                [(ngModel)]="orderDetail.account_number" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{'Mes de Vencimiento'|translate}}</ion-label>
+              <ion-select name="expMonth" [(ngModel)]="orderDetail.expiration_month" required>
+                <ion-option *ngFor="let n of [1,2,3,4,5,6,7,8,9,10,11,12]" value="{{n}}">{{n}}</ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>{{'Año de Vencimiento'|translate}}</ion-label>
+              <ion-select name="expYear" [(ngModel)]="orderDetail.expiration_year" required>
+                <ion-option
+                  *ngFor="let n of [2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033]"
+                  value="{{n}}">{{n}}</ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-input type="number" name="cvc" placeholder="{{'CVC'|translate}}" [(ngModel)]="orderDetail.cvv2"
+                required></ion-input>
+            </ion-item>
+
+          </ion-list>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button block color="wscolor" type="submit"
+            [disabled]="!card.form.valid">{{'Continuar'|translate}}</button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+  <button ion-button block class="button-footer" color="wscolor" (click)="paypalPayment()"
+    *ngIf="orderDetail.payment_method=='paypal'">{{'Continuar'|translate}}</button>
+  <button ion-button block class="button-footer" color="wscolor" (click)="addOrder()"
+    *ngIf="orderDetail.payment_method=='cod'">{{'Continuar'|translate}}</button>
+  <button ion-button block class="button-footer" color="wscolor" (click)="instamojoPayment()"
+    *ngIf="orderDetail.payment_method=='instamojo'">{{'Continuar'|translate}}</button>
+</ion-content>

@@ -1,0 +1,14 @@
+<ion-grid>
+
+  <ion-col *ngFor="let p of shared.flashSaleProducts" col-6 >
+    <product [data]="p" [type]="'flash'"></product>
+  </ion-col>
+
+  <ion-col *ngIf="products.length==0 && !httpRunning" col-12 class="animated fadeIn">
+    <h6 text-center>{{'¡Producto no Encontrado!'|translate}}</h6>
+  </ion-col>
+</ion-grid>
+
+<ion-infinite-scroll #infinite (ionInfinite)="getProducts($event)">
+  <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>

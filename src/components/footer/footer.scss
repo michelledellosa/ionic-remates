@@ -1,0 +1,27 @@
+footer {
+	.toolbar{
+		
+		.segment{
+			.segment-button {
+				border-bottom-color:transparent;
+				overflow: visible;
+				.icon{
+					font-size: 2.6rem;
+					line-height: 3rem;
+					img{
+						width:2.6rem;
+					}
+				}
+				.footer-title{
+					display:flex;
+					justify-content:center;
+					line-height:normal;
+					margin-top:-13px;
+				}
+			}
+			.segment-button.segment-activated{
+				color:color($colors, secondary);
+			}
+		}
+	}
+}

@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+      <form #loginForm="ngForm" (ngSubmit)="getSearchData()">
+          <ion-searchbar color="wscolor" [(ngModel)]="search" name="search" placeholder="{{'Quiero Comprar...'|translate}}" 
+            (ionInput)="onChangeKeyword($event)">
+          </ion-searchbar>
+        </form>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+
+   <div *ngFor="let p of searchResult">
+    <product [data]="p" [type]="'list'"></product>
+  </div> 
+  <ion-list class="list-view">
+      <span *ngFor="let p of searchResult">
+        <product [data]="p" [type]="'list'"></product>
+      </span>
+    </ion-list>
+
+</ion-content>

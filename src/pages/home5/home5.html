@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar color="wscolor">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-searchbar placeholder="Quiero Comprar..." (click)="openSearch()"></ion-searchbar>
+
+    <ion-buttons end>
+ 
+      <button ion-button icon-only class="cart-button" (click)="openCart()">
+        <ion-icon name="cart">
+          <ion-badge color="accent-color">{{shared.cartquantity}}</ion-badge>
+        </ion-icon>
+      </button>
+
+    </ion-buttons>
+  </ion-navbar>  
+</ion-header>

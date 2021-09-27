@@ -1,0 +1,254 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar color="wscolor">
+      <ion-row>
+        <ion-col class="m-lf">
+            <ion-title  ion-icon ios="ios-menu" md="md-menu">{{ 'Menu' | translate }}</ion-title>
+        </ion-col>
+      </ion-row>
+     
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="side-menu">
+
+    <ion-list class="list-avatar">
+      <ion-item *ngIf="shared.customerData.customers_id==null" (click)="openLoginPage()" >
+        <ion-avatar item-start>
+          <ion-icon name="contact"></ion-icon>
+        </ion-avatar>
+        <h2>{{ 'Iniciar Sesion o Registrarse' | translate }}</h2>
+        <p>{{ '' | translate }}</p>
+      </ion-item>
+
+      <ion-item *ngIf="shared.customerData.customers_id!=null" menuClose (click)="openPage('settings')">
+        <ion-avatar item-start>
+          
+        </ion-avatar>
+        <h2>{{shared.customerData.customers_firstname +"&nbsp;"+shared.customerData.customers_lastname}}</h2>
+        <p>{{shared.customerData.email}}</p>
+       
+      </ion-item>
+    </ion-list>
+
+    <ion-list class="list-menu" *ngIf="config.defaultIcons">
+      <span *ngIf="config.appInProduction">
+        <button menuClose ion-item (click)="openPage('home')">{{ 'Inicio' | translate }}
+          <ion-icon item-left name="home"></ion-icon>
+        </button>
+        
+        <button menuClose ion-item (click)="openPage('search')">{{ 'Buscar' | translate }}
+          <ion-icon item-left name="cash"></ion-icon>
+        </button>
+        <button menuClose ion-item (click)="openPage('cart')">{{ 'Tu Carrito de Compras' | translate }}
+            <ion-icon item-left name="cart"></ion-icon>
+          </button>
+       
+      </span>
+      <!-- list of pages -->
+      <span *ngIf="!config.appInProduction">
+        <button ion-item (click)="showHideHomeList()">{{ 'Inicio' | translate }}
+          <ion-icon item-left name="home"></ion-icon>
+          <ion-icon item-right [name]="homeListIcon"></ion-icon>
+        </button>
+        <div *ngIf="homeList" [@animate]>
+          <button menuClose ion-item (click)="openPage('home1')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-1
+          </button>
+          <button menuClose ion-item (click)="openPage('home2')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-2
+          </button>
+          <button menuClose ion-item (click)="openPage('home3')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-3
+          </button>
+          <button menuClose ion-item (click)="openPage('home4')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-4
+          </button>
+          <button menuClose ion-item (click)="openPage('home5')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-5
+          </button>
+        </div>
+        
+        <div *ngIf="categoriesList" [@animate]>
+          <button menuClose ion-item (click)="openPage('categories1')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-1
+          </button>
+          <button menuClose ion-item (click)="openPage('categories2')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-2
+          </button>
+          <button menuClose ion-item (click)="openPage('categories3')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-3
+          </button>
+          <button menuClose ion-item (click)="openPage('categories4')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-4
+          </button>
+          <button menuClose ion-item (click)="openPage('categories5')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-5
+          </button>
+          <button menuClose ion-item (click)="openPage('categories6')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-6
+          </button>
+        </div>
+        <button ion-item (click)="showHideShopList()">{{ 'Compras' | translate }}
+          <ion-icon item-left name="cash"></ion-icon>
+          <ion-icon item-right [name]="shopListIcon"></ion-icon>
+        </button>
+        <div *ngIf="shopList" [@animate]>
+          <button menuClose ion-item (click)="openPage('newest')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Lo mas Nuevo' | translate }}
+          </button>
+          <button menuClose ion-item (click)="openPage('topSeller')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Lo mas Vendido' | translate }}
+          </button>
+          <button menuClose ion-item (click)="openPage('deals')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Ofertas' | translate }}
+          </button>
+          <button menuClose ion-item (click)="openPage('mostLiked')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Lo mas Visitado' | translate }}
+          </button>
+        </div>
+      </span>
+
+      <!-- list of pages end -->
+     
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.wishListPage==1" (click)="openPage('myWishList')">{{
+        'Mi lista de Compras' | translate }}
+        <ion-icon item-left name="heart"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.editProfilePage==1" (click)="openPage('myAccount')">{{
+        'Editar Perfil' | translate }}
+        <ion-icon item-left name="lock"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.shippingAddressPage==1"
+        (click)="openPage('myShippingAddresses')">{{ 'Dirección de Envío' | translate }}
+        <ion-icon item-left name="bus"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.myOrdersPage==1" (click)="openPage('myOrders')">{{
+        'Mis Ordenes' | translate }}
+        <ion-icon item-left name="cart"></ion-icon>
+      </button>
+
+      <button menuClose ion-item *ngIf="config.contactUsPage==1" (click)="openPage('contactUs')">{{ 'Contáctanos' |
+        translate }}
+        <ion-icon item-left name="call"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="config.aboutUsPage==1" (click)="openPage('aboutUs')">{{ 'Sobre Nosotros' | translate
+        }}
+        <ion-icon item-left name="information-circle"></ion-icon>
+      </button>
+      
+      <button menuClose ion-item *ngIf="config.settingPage==1" (click)="openPage('settings')">{{ 'Ajustes' | translate
+        }}
+        <ion-icon item-left name="settings"></ion-icon>
+      </button>
+    </ion-list>
+    <ion-list class="list-menu" *ngIf="!config.defaultIcons">
+     
+      <!-- list of pages -->
+      <span *ngIf="!config.appInProduction">
+        <button ion-item (click)="showHideHomeList()">{{ 'Inicio' | translate }}
+          <ion-icon item-left><img src="assets/left-menu-icon/home.png"></ion-icon>
+          <ion-icon item-right [name]="homeListIcon"></ion-icon>
+        </button>
+        <div *ngIf="homeList" [@animate]>
+          <button menuClose ion-item (click)="openPage('home1')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-1
+          </button>
+          <button menuClose ion-item (click)="openPage('home2')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-2
+          </button>
+          <button menuClose ion-item (click)="openPage('home3')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-3
+          </button>
+          <button menuClose ion-item (click)="openPage('home4')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-4
+          </button>
+          <button menuClose ion-item (click)="openPage('home5')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Inicio' | translate }}-5
+          </button>
+        </div>
+        <button ion-item (click)="showHideCategoriesList()">{{ 'Categorias' | translate }}
+          <ion-icon item-left><img src="assets/left-menu-icon/category.png"></ion-icon>
+          <ion-icon item-right [name]="categoriesListIcon"></ion-icon>
+        </button>
+        <div *ngIf="categoriesList" [@animate]>
+          <button menuClose ion-item (click)="openPage('categories1')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-1
+          </button>
+          <button menuClose ion-item (click)="openPage('categories2')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-2
+          </button>
+          <button menuClose ion-item (click)="openPage('categories3')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-3
+          </button>
+          <button menuClose ion-item (click)="openPage('categories4')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-4
+          </button>
+          <button menuClose ion-item (click)="openPage('categories5')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-5
+          </button>
+          <button menuClose ion-item (click)="openPage('categories6')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Categorias' | translate }}-6
+          </button>
+        </div>
+        <button ion-item (click)="showHideShopList()">{{ 'Comprar' | translate }}
+          <ion-icon item-left><img src="assets/left-menu-icon/shop.png"></ion-icon>
+          <ion-icon item-right [name]="shopListIcon"></ion-icon>
+        </button>
+        <div *ngIf="shopList" [@animate]>
+          <button menuClose ion-item (click)="openPage('newest')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Nuevo' | translate }}
+          </button>
+          <button menuClose ion-item (click)="openPage('topSeller')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Mas Vendido' | translate }}
+          </button>
+          <button menuClose ion-item (click)="openPage('deals')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Ofertas' | translate }}
+          </button>
+          <button menuClose ion-item (click)="openPage('mostLiked')">
+            <ion-icon small item-left name="remove"></ion-icon> {{ 'Mas Visitado' | translate }}
+          </button>
+        </div>
+      </span>
+
+       <button menuClose ion-item (click)="openPage('home')">{{ 'Inicio' | translate }}
+        <ion-icon item-left name="home"></ion-icon>
+      </button>
+     
+      <button menuClose ion-item (click)="openPage('search')">{{ 'Buscar' | translate }}
+        <ion-icon item-left name="cash"></ion-icon>
+      </button>
+      <button menuClose ion-item (click)="openPage('cart')">{{ 'Tu Carrito de Compras' | translate }}
+          <ion-icon item-left name="cart"></ion-icon>
+        </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.wishListPage==1" (click)="openPage('myWishList')">{{
+        'Mi lista de Compras' | translate }}
+        <ion-icon item-left name="heart"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.editProfilePage==1" (click)="openPage('myAccount')">{{
+        'Editar Perfil' | translate }}
+        <ion-icon item-left name="lock"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.shippingAddressPage==1"
+        (click)="openPage('myShippingAddresses')">{{ 'Dirección de Envío' | translate }}
+        <ion-icon item-left name="bus"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="shared.customerData.customers_id!=null && config.myOrdersPage==1" (click)="openPage('myOrders')">{{
+        'Mis Ordenes' | translate }}
+        <ion-icon item-left name="cart"></ion-icon>
+      </button>
+
+      <button menuClose ion-item *ngIf="config.contactUsPage==1" (click)="openPage('contactUs')">{{ 'Contáctanos' |
+        translate }}
+        <ion-icon item-left name="call"></ion-icon>
+      </button>
+      <button menuClose ion-item *ngIf="config.aboutUsPage==1" (click)="openPage('aboutUs')">{{ 'Sobre Nosotros' | translate
+        }}
+        <ion-icon item-left name="information-circle"></ion-icon>
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
